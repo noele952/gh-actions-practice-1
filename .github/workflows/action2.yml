@@ -1,0 +1,8 @@
+name: Issue Workflow
+on: [issues, workflow_dispatch]
+jobs:
+  first-job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Output Event Detals
+        run:  event details

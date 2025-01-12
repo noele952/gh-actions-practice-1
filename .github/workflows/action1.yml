@@ -1,14 +1,22 @@
-name: First Workflow
+name: Push Workflow
 on: [push, workflow_dispatch]
 jobs:
-  first-job:
+  lint-test-build:
     runs-on: ubuntu-latest
     steps:
+      - name: Get code
+        uses: actions/checkout@v3
+      - name: Install NodeJS
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - name: Install dependencies
+        run: npm ci    
       - name: Lint
-        run: echo "linting"
+        run: "eslint --ext .jsx --fix src"
       - name: Test
-        run: echo "testing"
-      - name: Building
-        run: echo "building"
+        run: vitest run
+      - name: Build  
+        run: vite build
       - name: Deploy
         run: echo "deploying"  

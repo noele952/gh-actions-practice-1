@@ -1,7 +1,30 @@
-name: Push Workflow
+# name: Push Workflow
+# on: [push, workflow_dispatch]
+# jobs:
+#   lint-test-build:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Get code
+#         uses: actions/checkout@v3
+#       - name: Install NodeJS
+#         uses: actions/setup-node@v3
+#         with:
+#           node-version: 18
+#       - name: Install dependencies
+#         run: npm ci
+#       - name: Lint
+#         run: npm run lint      
+#       - name: Test
+#         run: npm run test
+#       - name: Build  
+#         run: npm run build
+#       - name: Deploy
+#         run: echo "deploying"  
+
+name: Push workflow
 on: [push, workflow_dispatch]
-jobs:
-  lint-test-build:
+jobs: 
+  lint:
     runs-on: ubuntu-latest
     steps:
       - name: Get code
@@ -12,11 +35,35 @@ jobs:
           node-version: 18
       - name: Install dependencies
         run: npm ci
-      - name: Lint
-        run: npm run lint      
+      - name: Test
+        run: npm run lint
+  test:
+    needs: lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get code
+        uses: actions/checkout@v3
+      - name: Install NodeJS
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - name: Install dependencies
+        run: npm ci
       - name: Test
         run: npm run test
-      - name: Build  
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get code
+        uses: actions/checkout@v3
+      - name: Install NodeJS
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - name: Install dependencies
+        run: npm ci
+      - name: Test
         run: npm run build
       - name: Deploy
-        run: echo "deploying"  
+        run: echo "deploying..."                  
